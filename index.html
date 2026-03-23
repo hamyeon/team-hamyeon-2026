@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>README</title>
+  <title>Team-Hamyeon</title>
 
   <link
     rel="stylesheet"
@@ -13,11 +13,63 @@
   />
 
   <style>
+    :root {
+      color-scheme: light dark;
+    }
+
     body {
       box-sizing: border-box;
       max-width: 900px;
       margin: 0 auto;
       padding: 45px;
+      background-color: #ffffff;
+      color: #24292f;
+    }
+
+    .markdown-body {
+      background-color: transparent;
+      color: inherit;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #0d1117;
+        color: #c9d1d9;
+      }
+
+      .markdown-body {
+        color: #c9d1d9;
+      }
+
+      .markdown-body a {
+        color: #58a6ff;
+      }
+
+      .markdown-body pre {
+        background-color: #161b22;
+      }
+
+      .markdown-body code {
+        background-color: rgba(110, 118, 129, 0.4);
+      }
+
+      .markdown-body pre code {
+        background-color: transparent;
+      }
+
+      .markdown-body blockquote {
+        color: #8b949e;
+        border-left-color: #30363d;
+      }
+
+      .markdown-body table th,
+      .markdown-body table td {
+        border-color: #30363d;
+      }
+
+      .markdown-body hr {
+        background-color: #30363d;
+      }
     }
 
     @media (max-width: 767px) {
