@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>README</title>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.8.1/github-markdown.min.css"
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
+  <style>
+    body {
+      box-sizing: border-box;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 45px;
+    }
+
+    @media (max-width: 767px) {
+      body {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <article id="content" class="markdown-body">불러오는 중...</article>
+
+  <script type="module">
+    import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
+
+    async function renderMarkdown() {
+      const res = await fetch("./README.md");
+      if (!res.ok) {
+        document.getElementById("content").textContent = "README.md를 불러오지 못했습니다.";
+        return;
+      }
+
+      const md = await res.text();
+      document.getElementById("content").innerHTML = marked.parse(md);
+    }
+
+    renderMarkdown();
+  </script>
+</body>
+</html>
