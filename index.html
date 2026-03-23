@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>README</title>
+</head>
+<body>
+  <pre id="content"></pre>
+
+  <script>
+    fetch('./README.md')
+      .then(res => res.text())
+      .then(text => {
+        document.getElementById('content').textContent = text;
+      });
+  </script>
+</body>
+</html>
