@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: shoepricevalidator
+
+server:
+  port: 8080
+
+ebay:
+  base-url: https://api.ebay.com
+  browse-search-path: /buy/browse/v1/item_summary/search
+  access-token: YOUR_EBAY_ACCESS_TOKEN
