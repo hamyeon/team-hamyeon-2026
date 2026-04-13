@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+.venv/
+venv/
+
+# Env files
+.env
+
+# Selenium / Chrome profile
+chrome_profile/
+playwright_profile/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Output data
+data/output/
+
+# Optional: local input files if they may contain personal work data
+# data/input/
+
+# Jupyter / temp
+.ipynb_checkpoints/
+*.log
