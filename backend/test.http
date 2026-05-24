@@ -9,3 +9,20 @@ Content-Type: application/json
   "conditionGrade": "A",
   "boxIncluded": true
 }
+
+### 최종 상품 등록
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "brand": "Nike",
+  "model": "Dunk Low",
+  "colorway": "Panda",
+  "sizeKr": 275,
+  "conditionGrade": "A",
+  "boxIncluded": true,
+  "recommendedPrice": 96000,
+  "baseMarketPrice": 104000,
+  "priceRange": "91,000원 ~ 101,000원",
+  "description": "AI 분석 및 시세 계산 후 최종 등록된 상품입니다."
+}
