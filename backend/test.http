@@ -1,0 +1,11 @@
+POST http://localhost:8080/api/products/calculate-price
+Content-Type: application/json
+
+{
+  "brand": "Nike",
+  "model": "Dunk Low",
+  "colorway": "Panda",
+  "sizeKr": 275,
+  "conditionGrade": "A",
+  "boxIncluded": true
+}
