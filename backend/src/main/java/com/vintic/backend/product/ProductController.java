@@ -1,5 +1,6 @@
 package com.vintic.backend.product;
 
+import com.vintic.backend.common.dto.ApiResponse;
 import com.vintic.backend.product.dto.CalculatePriceRequest;
 import com.vintic.backend.product.dto.CalculatePriceResponse;
 import com.vintic.backend.product.dto.CreateProductRequest;
@@ -26,18 +27,18 @@ public class ProductController {
     }
 
     @PostMapping("/calculate-price")
-    public ResponseEntity<CalculatePriceResponse> calculatePrice(
+    public ResponseEntity<ApiResponse<CalculatePriceResponse>> calculatePrice(
             @Valid @RequestBody CalculatePriceRequest request
     ) {
         CalculatePriceResponse response = priceCalculationService.calculate(request);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     @PostMapping
-    public ResponseEntity<ProductResponse> createProduct(
+    public ResponseEntity<ApiResponse<ProductResponse>> createProduct(
             @Valid @RequestBody CreateProductRequest request
     ) {
         ProductResponse response = productRegistrationService.createProduct(request);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 }
