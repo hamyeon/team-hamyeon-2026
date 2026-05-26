@@ -1,3 +1,6 @@
 .gradle/
 build/
+backend/build/
 HELP.md
+# IntelliJ IDEA
+.idea/
