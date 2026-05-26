@@ -1,6 +1,9 @@
 package com.vintic.backend.ai.service;
 
-import com.vintic.backend.ai.prompt.ProductAnalysisPrompt; // 작성하신 프롬프트 클래스 import
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vintic.backend.ai.prompt.ProductAnalysisPrompt;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -9,10 +12,13 @@ import org.springframework.web.client.RestTemplate;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class OpenAiService {
+
     @Value("${openai.api.key}")
     private String apiKey;
 
+    private final ObjectMapper objectMapper;
     private final RestTemplate restTemplate = new RestTemplate();
 
     public String analyzeProductImage(String imageUrl) {
@@ -23,16 +29,11 @@ public class OpenAiService {
         headers.setBearerAuth(apiKey);
 
         Map<String, Object> body = new HashMap<>();
-        body.put("model", "gpt-4o"); // 최신 멀티모달 모델
+        body.put("model", "gpt-4o");
 
-        // 시스템 메시지: 프롬프트 세팅
         Map<String, Object> systemMessage = new HashMap<>();
         systemMessage.put("role", "system");
         systemMessage.put("content", ProductAnalysisPrompt.SYSTEM_PROMPT);
-
-        // 유저 메시지: S3에 올라간 이미지 URL 세팅
-        Map<String, Object> userMessage = new HashMap<>();
-        userMessage.put("role", "user");
 
         Map<String, Object> imageUrlMap = new HashMap<>();
         imageUrlMap.put("url", imageUrl);
@@ -41,12 +42,12 @@ public class OpenAiService {
         imageContent.put("type", "image_url");
         imageContent.put("image_url", imageUrlMap);
 
+        Map<String, Object> userMessage = new HashMap<>();
+        userMessage.put("role", "user");
         userMessage.put("content", Collections.singletonList(imageContent));
 
-        //95 메시지 리스트에 시스템 역할과 유저 역할을 순서대로 삽입
         body.put("messages", Arrays.asList(systemMessage, userMessage));
 
-        // OpenAI가 무조건 JSON 형태로만 대답하도록 강제하는 옵션
         Map<String, Object> responseFormat = new HashMap<>();
         responseFormat.put("type", "json_object");
         body.put("response_format", responseFormat);
@@ -55,11 +56,28 @@ public class OpenAiService {
 
         HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
-        // API 호출
         ResponseEntity<String> response = restTemplate.exchange(
-                url, HttpMethod.POST, requestEntity, String.class
+                url,
+                HttpMethod.POST,
+                requestEntity,
+                String.class
         );
 
-        return response.getBody();
+        return extractContent(response.getBody());
+    }
+
+    private String extractContent(String responseBody) {
+        try {
+            JsonNode root = objectMapper.readTree(responseBody);
+
+            return root.path("choices")
+                    .get(0)
+                    .path("message")
+                    .path("content")
+                    .asText();
+
+        } catch (Exception e) {
+            throw new IllegalArgumentException("OpenAI 응답에서 분석 결과를 추출할 수 없습니다.", e);
+        }
     }
 }
