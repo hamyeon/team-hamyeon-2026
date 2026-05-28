@@ -14,7 +14,7 @@ public class PriceCalculationService {
     private static final double KREAM_WEIGHT = 0.7;
     private static final double EBAY_WEIGHT = 0.3;
     private static final double PRICE_RANGE_RATE = 0.05;
-    private static final double DEFAULT_CONDITION_RATE = 0.80;
+    private static final double DEFAULT_CONDITION_RATE = 0.60;
     private static final String UNKNOWN_CONDITION_GRADE = "UNKNOWN";
 
     private final MarketPriceDataLoader marketPriceDataLoader;
@@ -124,11 +124,11 @@ public class PriceCalculationService {
 
     private double getConditionRate(String normalizedConditionGrade) {
         return switch (normalizedConditionGrade) {
-            case "DS" -> 1.00;
-            case "S" -> 0.97;
-            case "A" -> 0.92;
-            case "B" -> 0.82;
-            case "C" -> 0.70;
+            case "DS" -> 0.80;
+            case "S" -> 0.70;
+            case "A" -> 0.60;
+            case "B" -> 0.40;
+            case "C" -> 0.20;
             default -> DEFAULT_CONDITION_RATE;
         };
     }
