@@ -18,20 +18,9 @@ public class AnalyzeController {
     private final ProductAnalyzeService productAnalyzeService;
 
     @PostMapping(value = "/analyze", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ApiResponse<?>> analyzeImage(@RequestPart("image") MultipartFile image) {
-        if (image == null || image.isEmpty()) {
-            return ResponseEntity.badRequest()
-                    .body(ApiResponse.fail(40002, "이미지 파일이 없습니다."));
-        }
-
-        try {
-            AnalyzeResponse response = productAnalyzeService.processImageAndAnalyze(image);
-            return ResponseEntity.ok(ApiResponse.success(response));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.internalServerError()
-                    .body(ApiResponse.fail(50003, "이미지 분석에 실패했습니다."));
-        }
+    public ResponseEntity<ApiResponse<AnalyzeResponse>> analyzeImage(@RequestPart("image") MultipartFile image) {
+        // 에러나면 서비스가 알아서 던지고 Advice가 알아서 처리함
+        AnalyzeResponse aiAnalysisResult = productAnalyzeService.processImageAndAnalyze(image);
+        return ResponseEntity.ok(ApiResponse.success(aiAnalysisResult));
     }
 }

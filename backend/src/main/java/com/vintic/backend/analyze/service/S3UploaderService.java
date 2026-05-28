@@ -1,5 +1,6 @@
 package com.vintic.backend.analyze.service;
 
+import com.vintic.backend.common.exception.S3UploadException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,27 +22,36 @@ public class S3UploaderService {
     private String bucket;
 
 
-    public String uploadImage(MultipartFile image) throws IOException {
-        // 파일명 추출 및 변환
-        String originalFilename = image.getOriginalFilename();
-        String uniqueFilename = UUID.randomUUID() + "_" + originalFilename; // 난수 붙이기 (예: 1234_신발.jpg)
+    public String uploadImage(MultipartFile image) {
 
-        // S3 업로드 요청서 작성
-        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
-                .bucket(bucket) // 어느 버킷에?
-                .key(uniqueFilename) // 무슨 이름으로?
-                .contentType(image.getContentType()) // 파일 종류는 뭐야? (이미지)
-                .build();
+        try {
+            // 파일명 추출 및 변환
+            String originalFilename = image.getOriginalFilename();
+            String uniqueFilename = UUID.randomUUID() + "_" + originalFilename; // 난수 붙이기 (예: 1234_신발.jpg)
 
-        // 파일 전송 (진짜 업로드 명령)
-        s3Client.putObject(putObjectRequest,
-                RequestBody.fromInputStream(image.getInputStream(), image.getSize()));
+            // S3 업로드 요청서 작성
+            PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                    .bucket(bucket) // 어느 버킷에?
+                    .key(uniqueFilename) // 무슨 이름으로?
+                    .contentType(image.getContentType()) // 파일 종류? (이미지)
+                    .build();
 
-        // URL 조립
-        // S3 기본 주소 + 버킷 이름 + 리전(서울) + 파일이름을 합침
-        String imageUrl = "https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/" + uniqueFilename;
+            // 파일 전송 (진짜 업로드 명령)
+            s3Client.putObject(putObjectRequest,
+                    RequestBody.fromInputStream(image.getInputStream(), image.getSize()));
 
-        return imageUrl; // 완성된 주소를 컨트롤러로
+            // URL 조립
+            // S3 기본 주소 + 버킷 이름 + 지역(서울) + 파일이름을 합침
+            String imageUrl = "https://" + bucket + ".s3.ap-northeast-2.amazonaws.com/" + uniqueFilename;
+
+            return imageUrl; // 완성된 주소를 컨트롤러로
+        } catch (Exception e) {
+            // S3 에러 발생 시 전용 에러로 바꿔서 던지기
+            throw new S3UploadException("S3 이미지 업로드 중 문제가 발생했습니다.");
+        }
+
+
+
     }
 
 

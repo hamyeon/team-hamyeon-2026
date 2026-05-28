@@ -3,6 +3,7 @@ package com.vintic.backend.ai.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vintic.backend.ai.prompt.ProductAnalysisPrompt;
+import com.vintic.backend.common.exception.AiApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -15,6 +16,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class OpenAiService {
 
+
     @Value("${openai.api.key}")
     private String apiKey;
 
@@ -22,48 +24,54 @@ public class OpenAiService {
     private final RestTemplate restTemplate = new RestTemplate();
 
     public String analyzeProductImage(String imageUrl) {
-        String url = "https://api.openai.com/v1/chat/completions";
+        try {
+            String url = "https://api.openai.com/v1/chat/completions";
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(apiKey);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.setBearerAuth(apiKey);
 
-        Map<String, Object> body = new HashMap<>();
-        body.put("model", "gpt-4o");
+            Map<String, Object> body = new HashMap<>();
+            body.put("model", "gpt-4o");
 
-        Map<String, Object> systemMessage = new HashMap<>();
-        systemMessage.put("role", "system");
-        systemMessage.put("content", ProductAnalysisPrompt.SYSTEM_PROMPT);
+            Map<String, Object> systemMessage = new HashMap<>();
+            systemMessage.put("role", "system");
+            systemMessage.put("content", ProductAnalysisPrompt.SYSTEM_PROMPT);
 
-        Map<String, Object> imageUrlMap = new HashMap<>();
-        imageUrlMap.put("url", imageUrl);
+            Map<String, Object> imageUrlMap = new HashMap<>();
+            imageUrlMap.put("url", imageUrl);
 
-        Map<String, Object> imageContent = new HashMap<>();
-        imageContent.put("type", "image_url");
-        imageContent.put("image_url", imageUrlMap);
+            Map<String, Object> imageContent = new HashMap<>();
+            imageContent.put("type", "image_url");
+            imageContent.put("image_url", imageUrlMap);
 
-        Map<String, Object> userMessage = new HashMap<>();
-        userMessage.put("role", "user");
-        userMessage.put("content", Collections.singletonList(imageContent));
+            Map<String, Object> userMessage = new HashMap<>();
+            userMessage.put("role", "user");
+            userMessage.put("content", Collections.singletonList(imageContent));
 
-        body.put("messages", Arrays.asList(systemMessage, userMessage));
+            body.put("messages", Arrays.asList(systemMessage, userMessage));
 
-        Map<String, Object> responseFormat = new HashMap<>();
-        responseFormat.put("type", "json_object");
-        body.put("response_format", responseFormat);
+            Map<String, Object> responseFormat = new HashMap<>();
+            responseFormat.put("type", "json_object");
+            body.put("response_format", responseFormat);
 
-        body.put("max_tokens", 1000);
+            body.put("max_tokens", 1000);
 
-        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+            HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
-        ResponseEntity<String> response = restTemplate.exchange(
-                url,
-                HttpMethod.POST,
-                requestEntity,
-                String.class
-        );
+            ResponseEntity<String> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.POST,
+                    requestEntity,
+                    String.class
+            );
 
-        return extractContent(response.getBody());
+            return extractContent(response.getBody());
+
+        } catch (Exception e) {
+            // OpenAI 타임아웃/오류 발생 시 전용 에러 던지기
+            throw new AiApiException("AI 분석 API 호출 중 오류가 발생했습니다.");
+        }
     }
 
     private String extractContent(String responseBody) {

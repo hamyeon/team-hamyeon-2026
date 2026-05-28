@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vintic.backend.ai.service.OpenAiService;
 import com.vintic.backend.analyze.dto.AnalyzeResponse;
+import com.vintic.backend.common.exception.AiApiException;
+import com.vintic.backend.common.exception.InvalidImageException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,9 +21,14 @@ public class ProductAnalyzeService {
     private final ObjectMapper objectMapper;
 
     public AnalyzeResponse processImageAndAnalyze(MultipartFile imageFile) {
+
+        if (imageFile == null || imageFile.isEmpty()) {
+            throw new InvalidImageException("이미지 파일이 존재하지 않습니다.");
+        }
+
         try {
-            String imageUrl = s3Service.uploadImage(imageFile);
-            String aiAnalysisResult = openAiService.analyzeProductImage(imageUrl);
+            String imageUrl = s3Service.uploadImage(imageFile);//실패시 s3업로드 에러 날아감
+            String aiAnalysisResult = openAiService.analyzeProductImage(imageUrl);//ai 분석 실패시 에러 날아감
 
             AnalyzeResponse response = objectMapper.readValue(aiAnalysisResult, AnalyzeResponse.class);
 
@@ -36,9 +43,7 @@ public class ProductAnalyzeService {
             );
 
         } catch (JsonProcessingException e) {
-            throw new IllegalArgumentException("AI 분석 응답을 파싱할 수 없습니다.", e);
-        } catch (IOException e) {
-            throw new IllegalStateException("이미지 업로드 중 오류가 발생했습니다.", e);
+            throw new AiApiException("AI 분석 응답을 처리하는 중 오류가 발생했습니다.");
         }
     }
 }
