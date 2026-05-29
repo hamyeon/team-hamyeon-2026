@@ -14,6 +14,8 @@ export const vars = createGlobalTheme(':root', {
     gray6: '#4A4A4A',
     gray7: '#303030',
     black: '#1A1A1A',
+
+    error: '#FF4744',
   },
 
   spacing: {
