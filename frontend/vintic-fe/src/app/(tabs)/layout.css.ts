@@ -1,7 +1,7 @@
 import { style } from '@vanilla-extract/css';
 import { vars } from '@/shared/styles/theme.css';
 
-export const page = style({
+export const layout = style({
   minHeight: '100dvh',
   display: 'flex',
   flexDirection: 'column',
@@ -10,11 +10,5 @@ export const page = style({
 
 export const content = style({
   flex: 1,
-  padding: vars.spacing[20],
-});
-
-export const fab = style({
-  position: 'fixed',
-  right: vars.spacing[20],
-  bottom: vars.spacing[24],
+  minHeight: 0,
 });

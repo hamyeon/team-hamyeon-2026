@@ -10,6 +10,7 @@ export const header = style({
   paddingRight: vars.spacing[16],
   paddingLeft: vars.spacing[20],
   background: vars.color.white,
+  borderBottom: `1px solid ${vars.color.gray2}`
 });
 
 export const title = style({
