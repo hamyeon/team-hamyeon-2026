@@ -7,12 +7,15 @@ export const vars = createGlobalTheme(':root', {
 
     white: '#FFFFFF',
     gray1: '#ECECEC',
-    gray2: '#DADADA',
-    gray3: '#D3D3D3',
-    gray4: '#808080',
-    gray5: '#4A4A4A',
-    gray6: '#404040',
+    gray2: '#DEDEDE',
+    gray3: '#CACACA',
+    gray4: '#9A9A9A',
+    gray5: '#808080',
+    gray6: '#4A4A4A',
+    gray7: '#303030',
     black: '#1A1A1A',
+
+    error: '#FF4744',
   },
 
   spacing: {
