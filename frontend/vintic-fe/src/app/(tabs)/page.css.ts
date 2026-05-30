@@ -7,7 +7,7 @@ export const page = style({
   background: vars.color.white,
 });
 
-export const fab = style({
+export const fabLink = style({
   position: 'fixed',
   right: vars.spacing[20],
   bottom: `calc(72px + ${vars.spacing[24]} + env(safe-area-inset-bottom))`,
