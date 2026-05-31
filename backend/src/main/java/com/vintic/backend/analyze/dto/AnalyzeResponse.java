@@ -1,7 +1,9 @@
 package com.vintic.backend.analyze.dto;
 
+import java.util.List;
+
 public record AnalyzeResponse(
-        String imgUrl,
+        List<String> imageUrls,
         String brand,
         String modelName,
         String color,

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,20 +21,23 @@ public class ProductAnalyzeService {
     private final OpenAiService openAiService;
     private final ObjectMapper objectMapper;
 
-    public AnalyzeResponse processImageAndAnalyze(MultipartFile imageFile) {
+    public AnalyzeResponse processImageAndAnalyze(List<MultipartFile> imageFiles) {
 
-        if (imageFile == null || imageFile.isEmpty()) {
+        // 방어 로직: 리스트 자체가 null이거나 비어있는지, 첫 번째 파일이 비어있는지 확인
+        if (imageFiles == null || imageFiles.isEmpty() || imageFiles.get(0).isEmpty()) {
             throw new InvalidImageException("이미지 파일이 존재하지 않습니다.");
         }
 
         try {
-            String imageUrl = s3Service.uploadImage(imageFile);//실패시 s3업로드 에러 날아감
-            String aiAnalysisResult = openAiService.analyzeProductImage(imageUrl);//ai 분석 실패시 에러 날아감
+            // S3에 여러 이미지 업로드 후 URL 리스트 반환
+            List<String> imageUrls = s3Service.uploadImages(imageFiles);
+            // URL 리스트를 AI 서비스로 전달
+            String aiAnalysisResult = openAiService.analyzeProductImages(imageUrls);
 
             AnalyzeResponse response = objectMapper.readValue(aiAnalysisResult, AnalyzeResponse.class);
 
             return new AnalyzeResponse(
-                    imageUrl,
+                    imageUrls, // 변경된 리스트 타입 삽입
                     response.brand(),
                     response.modelName(),
                     response.color(),

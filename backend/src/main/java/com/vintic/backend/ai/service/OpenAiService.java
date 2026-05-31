@@ -16,14 +16,13 @@ import java.util.*;
 @RequiredArgsConstructor
 public class OpenAiService {
 
-
     @Value("${openai.api.key}")
     private String apiKey;
 
     private final ObjectMapper objectMapper;
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public String analyzeProductImage(String imageUrl) {
+    public String analyzeProductImages(List<String> imageUrls) { // List 파라미터로 변경
         try {
             String url = "https://api.openai.com/v1/chat/completions";
 
@@ -38,16 +37,22 @@ public class OpenAiService {
             systemMessage.put("role", "system");
             systemMessage.put("content", ProductAnalysisPrompt.SYSTEM_PROMPT);
 
-            Map<String, Object> imageUrlMap = new HashMap<>();
-            imageUrlMap.put("url", imageUrl);
+            // 전달받은 URL 리스트를 순회하며 요청에 담을 Content 객체 리스트 생성
+            List<Map<String, Object>> contentList = new ArrayList<>();
+            for (String imageUrl : imageUrls) {
+                Map<String, Object> imageUrlMap = new HashMap<>();
+                imageUrlMap.put("url", imageUrl);
 
-            Map<String, Object> imageContent = new HashMap<>();
-            imageContent.put("type", "image_url");
-            imageContent.put("image_url", imageUrlMap);
+                Map<String, Object> imageContent = new HashMap<>();
+                imageContent.put("type", "image_url");
+                imageContent.put("image_url", imageUrlMap);
+
+                contentList.add(imageContent);
+            }
 
             Map<String, Object> userMessage = new HashMap<>();
             userMessage.put("role", "user");
-            userMessage.put("content", Collections.singletonList(imageContent));
+            userMessage.put("content", contentList); // singletonList 대신 완성된 contentList 삽입
 
             body.put("messages", Arrays.asList(systemMessage, userMessage));
 
@@ -69,21 +74,19 @@ public class OpenAiService {
             return extractContent(response.getBody());
 
         } catch (Exception e) {
-            // OpenAI 타임아웃/오류 발생 시 전용 에러 던지기
             throw new AiApiException("AI 분석 API 호출 중 오류가 발생했습니다.");
         }
     }
 
     private String extractContent(String responseBody) {
+        // 기존 코드 유지
         try {
             JsonNode root = objectMapper.readTree(responseBody);
-
             return root.path("choices")
                     .get(0)
                     .path("message")
                     .path("content")
                     .asText();
-
         } catch (Exception e) {
             throw new IllegalArgumentException("OpenAI 응답에서 분석 결과를 추출할 수 없습니다.", e);
         }
