@@ -2,34 +2,35 @@ package com.vintic.backend.product.dto;
 
 import com.vintic.backend.product.domain.Product;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record ProductResponse(
         Long id,
-        String imageUrl,
+        List<String> imageUrls,
         String brand,
-        String model,
-        String colorway,
-        Integer sizeKr,
+        String modelName,
+        String color,
+        Integer size,
         String conditionGrade,
-        Boolean boxIncluded,
+        String componentStatus,
         Integer recommendedPrice,
         Integer baseMarketPrice,
         String priceRange,
-        Integer finalPrice,
+        Integer sellingPrice,
         String reason,
-        String description,
+        String sellerDescription,
         LocalDateTime createdAt
 ) {
     public static ProductResponse from(Product product) {
         return new ProductResponse(
                 product.getId(),
-                product.getImageUrl(),
+                product.getImageUrls(),
                 product.getBrand(),
                 product.getModel(),
                 product.getColorway(),
                 product.getSizeKr(),
                 product.getConditionGrade(),
-                product.getBoxIncluded(),
+                product.getComponentStatus(),
                 product.getRecommendedPrice(),
                 product.getBaseMarketPrice(),
                 product.getPriceRange(),

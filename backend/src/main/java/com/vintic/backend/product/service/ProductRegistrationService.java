@@ -19,19 +19,19 @@ public class ProductRegistrationService {
     @Transactional
     public ProductResponse createProduct(CreateProductRequest request) {
         Product product = new Product(
-                request.imageUrl(),
+                request.imageUrls(),
                 request.brand(),
-                request.model(),
-                request.colorway(),
-                request.sizeKr(),
+                request.modelName(),
+                request.color(),
+                request.size(),
                 request.conditionGrade(),
-                request.boxIncluded(),
+                request.componentStatus(),
                 request.recommendedPrice(),
                 request.baseMarketPrice(),
                 request.priceRange(),
-                request.finalPrice(),
+                request.sellingPrice(),
                 request.reason(),
-                request.description()
+                request.sellerDescription()
         );
 
         Product savedProduct = productRepository.save(product);

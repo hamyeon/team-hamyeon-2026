@@ -2,6 +2,8 @@ package com.vintic.backend.product.domain;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -11,14 +13,20 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String imageUrl;
+    @ElementCollection
+    @CollectionTable(
+            name = "product_image_urls",
+            joinColumns = @JoinColumn(name = "product_id")
+    )
+    @Column(name = "image_url", nullable = false, length = 1000)
+    private List<String> imageUrls = new ArrayList<>();
 
     private String brand;
     private String model;
     private String colorway;
     private Integer sizeKr;
     private String conditionGrade;
-    private Boolean boxIncluded;
+    private String componentStatus;
 
     private Integer recommendedPrice;
     private Integer baseMarketPrice;
@@ -37,13 +45,13 @@ public class Product {
     }
 
     public Product(
-            String imageUrl,
+            List<String> imageUrls,
             String brand,
             String model,
             String colorway,
             Integer sizeKr,
             String conditionGrade,
-            Boolean boxIncluded,
+            String componentStatus,
             Integer recommendedPrice,
             Integer baseMarketPrice,
             String priceRange,
@@ -51,13 +59,13 @@ public class Product {
             String reason,
             String description
     ) {
-        this.imageUrl = imageUrl;
+        this.imageUrls = new ArrayList<>(imageUrls);
         this.brand = brand;
         this.model = model;
         this.colorway = colorway;
         this.sizeKr = sizeKr;
         this.conditionGrade = conditionGrade;
-        this.boxIncluded = boxIncluded;
+        this.componentStatus = componentStatus;
         this.recommendedPrice = recommendedPrice;
         this.baseMarketPrice = baseMarketPrice;
         this.priceRange = priceRange;
@@ -71,8 +79,8 @@ public class Product {
         return id;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public List<String> getImageUrls() {
+        return imageUrls;
     }
 
     public String getBrand() {
@@ -95,8 +103,8 @@ public class Product {
         return conditionGrade;
     }
 
-    public Boolean getBoxIncluded() {
-        return boxIncluded;
+    public String getComponentStatus() {
+        return componentStatus;
     }
 
     public Integer getRecommendedPrice() {
