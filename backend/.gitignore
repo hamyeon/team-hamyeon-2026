@@ -5,3 +5,5 @@ HELP.md
 # IntelliJ IDEA
 .idea/
 *.pem
+.env
+
