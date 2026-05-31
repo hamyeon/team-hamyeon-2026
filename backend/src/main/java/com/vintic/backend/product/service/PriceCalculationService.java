@@ -50,9 +50,9 @@ public class PriceCalculationService {
 
         String normalizedConditionGrade = normalizeConditionGrade(request.conditionGrade());
         double conditionRate = getConditionRate(normalizedConditionGrade);
-        double boxRate = getBoxRate(request.boxIncluded());
+        double componentRate = getComponentRate(request.componentStatus());
 
-        int calculatedPrice = (int) Math.round(baseMarketPrice * conditionRate * boxRate);
+        int calculatedPrice = (int) Math.round(baseMarketPrice * conditionRate * componentRate);
         int recommendedPrice = roundToNearestThousand(calculatedPrice);
 
         String priceRange = makePriceRange(recommendedPrice);
@@ -66,8 +66,8 @@ public class PriceCalculationService {
                 recommendedPrice,
                 normalizedConditionGrade,
                 conditionRate,
-                request.boxIncluded(),
-                boxRate,
+                request.componentStatus(),
+                componentRate,
                 priceRange
         );
 
@@ -86,9 +86,9 @@ public class PriceCalculationService {
     private List<MarketPriceRow> findMatches(List<MarketPriceRow> rows, CalculatePriceRequest request) {
         return rows.stream()
                 .filter(row -> equalsIgnoreCase(row.brand(), request.brand()))
-                .filter(row -> containsBothWays(row.model(), request.model()))
-                .filter(row -> containsBothWays(row.colorway(), request.colorway()))
-                .filter(row -> row.sizeKr().equals(request.sizeKr()))
+                .filter(row -> containsBothWays(row.model(), request.modelName()))
+                .filter(row -> containsBothWays(row.colorway(), request.color()))
+                .filter(row -> row.sizeKr().equals(request.size()))
                 .sorted(Comparator.comparingInt(MarketPriceRow::price))
                 .toList();
     }
@@ -133,12 +133,17 @@ public class PriceCalculationService {
         };
     }
 
-    private double getBoxRate(Boolean boxIncluded) {
-        if (boxIncluded == null) {
+    private double getComponentRate(String componentStatus) {
+        if (componentStatus == null || componentStatus.isBlank()) {
             return 0.97;
         }
 
-        return boxIncluded ? 1.00 : 0.95;
+        return switch (componentStatus.trim().toUpperCase()) {
+            case "FULL" -> 1.00;
+            case "PARTIAL" -> 0.97;
+            case "NONE" -> 0.95;
+            default -> 0.97;
+        };
     }
 
     private int roundToNearestThousand(int price) {
@@ -161,8 +166,8 @@ public class PriceCalculationService {
             int recommendedPrice,
             String normalizedConditionGrade,
             double conditionRate,
-            Boolean boxIncluded,
-            double boxRate,
+            String componentStatus,
+            double componentRate,
             String priceRange
     ) {
         String marketPriceText = makeMarketPriceText(
@@ -174,14 +179,14 @@ public class PriceCalculationService {
         );
 
         String conditionText = makeConditionText(normalizedConditionGrade, conditionRate);
-        String boxText = makeBoxText(boxIncluded, boxRate);
+        String componentText = makeComponentText(componentStatus, componentRate);
         String comparisonText = makeComparisonText(kreamAveragePrice, ebayAveragePrice, recommendedPrice);
 
         return String.format(
                 "%s %s %s 이를 바탕으로 최종 추천가는 %,d원으로 산정했으며, 판매 권장 범위는 %s입니다. %s",
                 marketPriceText,
                 conditionText,
-                boxText,
+                componentText,
                 recommendedPrice,
                 priceRange,
                 comparisonText
@@ -260,25 +265,27 @@ public class PriceCalculationService {
         };
     }
 
-    private String makeBoxText(Boolean boxIncluded, double boxRate) {
-        if (boxIncluded == null) {
-            return String.format(
-                    "구성품 여부는 확인되지 않아 %.0f%% 반영률을 적용했습니다.",
-                    boxRate * 100
-            );
-        }
+    private String makeComponentText(String componentStatus, double componentRate) {
+        String normalizedStatus = componentStatus == null ? "UNKNOWN" : componentStatus.trim().toUpperCase();
 
-        if (boxIncluded) {
-            return String.format(
-                    "박스가 포함되어 있어 %.0f%% 반영률을 적용했습니다.",
-                    boxRate * 100
+        return switch (normalizedStatus) {
+            case "FULL" -> String.format(
+                    "구성품이 모두 포함되어 있어 %.0f%% 반영률을 적용했습니다.",
+                    componentRate * 100
             );
-        }
-
-        return String.format(
-                "박스가 포함되지 않아 %.0f%% 반영률을 적용했습니다.",
-                boxRate * 100
-        );
+            case "PARTIAL" -> String.format(
+                    "구성품이 일부 포함되어 있어 %.0f%% 반영률을 적용했습니다.",
+                    componentRate * 100
+            );
+            case "NONE" -> String.format(
+                    "구성품이 없어 %.0f%% 반영률을 적용했습니다.",
+                    componentRate * 100
+            );
+            default -> String.format(
+                    "구성품 상태를 명확히 판단하기 어려워 %.0f%% 반영률을 적용했습니다.",
+                    componentRate * 100
+            );
+        };
     }
 
     private String makeComparisonText(int kreamAveragePrice, int ebayAveragePrice, int recommendedPrice) {

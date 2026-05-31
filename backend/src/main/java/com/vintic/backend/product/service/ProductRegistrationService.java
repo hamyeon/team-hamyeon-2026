@@ -21,17 +21,17 @@ public class ProductRegistrationService {
         Product product = new Product(
                 request.imageUrls(),
                 request.brand(),
-                request.model(),
-                request.colorway(),
-                request.sizeKr(),
+                request.modelName(),
+                request.color(),
+                request.size(),
                 request.conditionGrade(),
-                request.boxIncluded(),
+                request.componentStatus(),
                 request.recommendedPrice(),
                 request.baseMarketPrice(),
                 request.priceRange(),
-                request.finalPrice(),
+                request.sellingPrice(),
                 request.reason(),
-                request.description()
+                request.sellerDescription()
         );
 
         Product savedProduct = productRepository.save(product);

@@ -26,7 +26,7 @@ public class Product {
     private String colorway;
     private Integer sizeKr;
     private String conditionGrade;
-    private Boolean boxIncluded;
+    private String componentStatus;
 
     private Integer recommendedPrice;
     private Integer baseMarketPrice;
@@ -51,7 +51,7 @@ public class Product {
             String colorway,
             Integer sizeKr,
             String conditionGrade,
-            Boolean boxIncluded,
+            String componentStatus,
             Integer recommendedPrice,
             Integer baseMarketPrice,
             String priceRange,
@@ -65,7 +65,7 @@ public class Product {
         this.colorway = colorway;
         this.sizeKr = sizeKr;
         this.conditionGrade = conditionGrade;
-        this.boxIncluded = boxIncluded;
+        this.componentStatus = componentStatus;
         this.recommendedPrice = recommendedPrice;
         this.baseMarketPrice = baseMarketPrice;
         this.priceRange = priceRange;
@@ -103,8 +103,8 @@ public class Product {
         return conditionGrade;
     }
 
-    public Boolean getBoxIncluded() {
-        return boxIncluded;
+    public String getComponentStatus() {
+        return componentStatus;
     }
 
     public Integer getRecommendedPrice() {

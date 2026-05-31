@@ -1,7 +1,6 @@
 package com.vintic.backend.product.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -9,7 +8,7 @@ import java.util.List;
 
 public record CreateProductRequest(
 
-        @NotEmpty(message = "이미지 URL은 최소 3개 이상 필요합니다.")
+        @NotNull(message = "이미지 URL은 필수입니다.")
         @Size(min = 3, max = 4, message = "이미지 URL은 최소 3개, 최대 4개까지 등록할 수 있습니다.")
         List<@NotBlank(message = "이미지 URL은 비어 있을 수 없습니다.") String> imageUrls,
 
@@ -17,19 +16,19 @@ public record CreateProductRequest(
         String brand,
 
         @NotBlank(message = "모델명은 필수입니다.")
-        String model,
+        String modelName,
 
-        @NotBlank(message = "컬러웨이는 필수입니다.")
-        String colorway,
+        @NotBlank(message = "색상은 필수입니다.")
+        String color,
 
         @NotNull(message = "한국 사이즈는 필수입니다.")
-        Integer sizeKr,
+        Integer size,
 
         @NotBlank(message = "상품 상태 등급은 필수입니다.")
         String conditionGrade,
 
-        @NotNull(message = "박스 포함 여부는 필수입니다.")
-        Boolean boxIncluded,
+        @NotBlank(message = "구성품 상태는 필수입니다.")
+        String componentStatus,
 
         @NotNull(message = "추천 가격은 필수입니다.")
         Integer recommendedPrice,
@@ -39,10 +38,10 @@ public record CreateProductRequest(
         String priceRange,
 
         @NotNull(message = "최종 판매 가격은 필수입니다.")
-        Integer finalPrice,
+        Integer sellingPrice,
 
         String reason,
 
-        String description
+        String sellerDescription
 ) {
 }
