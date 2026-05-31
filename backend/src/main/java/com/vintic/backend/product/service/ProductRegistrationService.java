@@ -19,7 +19,7 @@ public class ProductRegistrationService {
     @Transactional
     public ProductResponse createProduct(CreateProductRequest request) {
         Product product = new Product(
-                request.imageUrl(),
+                request.imageUrls(),
                 request.brand(),
                 request.model(),
                 request.colorway(),

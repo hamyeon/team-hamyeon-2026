@@ -1,12 +1,17 @@
 package com.vintic.backend.product.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
+import java.util.List;
 
 public record CreateProductRequest(
 
-        @NotBlank(message = "이미지 URL은 필수입니다.")
-        String imageUrl,
+        @NotEmpty(message = "이미지 URL은 최소 3개 이상 필요합니다.")
+        @Size(min = 3, max = 4, message = "이미지 URL은 최소 3개, 최대 4개까지 등록할 수 있습니다.")
+        List<@NotBlank(message = "이미지 URL은 비어 있을 수 없습니다.") String> imageUrls,
 
         @NotBlank(message = "브랜드는 필수입니다.")
         String brand,

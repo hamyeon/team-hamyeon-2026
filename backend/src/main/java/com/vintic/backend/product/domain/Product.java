@@ -2,6 +2,8 @@ package com.vintic.backend.product.domain;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -11,7 +13,13 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String imageUrl;
+    @ElementCollection
+    @CollectionTable(
+            name = "product_image_urls",
+            joinColumns = @JoinColumn(name = "product_id")
+    )
+    @Column(name = "image_url", nullable = false, length = 1000)
+    private List<String> imageUrls = new ArrayList<>();
 
     private String brand;
     private String model;
@@ -37,7 +45,7 @@ public class Product {
     }
 
     public Product(
-            String imageUrl,
+            List<String> imageUrls,
             String brand,
             String model,
             String colorway,
@@ -51,7 +59,7 @@ public class Product {
             String reason,
             String description
     ) {
-        this.imageUrl = imageUrl;
+        this.imageUrls = new ArrayList<>(imageUrls);
         this.brand = brand;
         this.model = model;
         this.colorway = colorway;
@@ -71,8 +79,8 @@ public class Product {
         return id;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public List<String> getImageUrls() {
+        return imageUrls;
     }
 
     public String getBrand() {

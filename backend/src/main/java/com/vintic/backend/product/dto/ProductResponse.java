@@ -2,10 +2,11 @@ package com.vintic.backend.product.dto;
 
 import com.vintic.backend.product.domain.Product;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record ProductResponse(
         Long id,
-        String imageUrl,
+        List<String> imageUrls,
         String brand,
         String model,
         String colorway,
@@ -23,7 +24,7 @@ public record ProductResponse(
     public static ProductResponse from(Product product) {
         return new ProductResponse(
                 product.getId(),
-                product.getImageUrl(),
+                product.getImageUrls(),
                 product.getBrand(),
                 product.getModel(),
                 product.getColorway(),
