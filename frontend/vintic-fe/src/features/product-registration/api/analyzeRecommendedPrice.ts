@@ -14,11 +14,11 @@ export async function analyzeRecommendedPrice(
     return createFailureResponse(40001, '브랜드는 필수입니다.');
   }
 
-  if (!request.model) {
+  if (!request.modelName) {
     return createFailureResponse(40001, '모델명은 필수입니다.');
   }
 
-  if (!request.colorway) {
+  if (!request.color) {
     return createFailureResponse(40001, '컬러웨이는 필수입니다.');
   }
 
@@ -38,8 +38,8 @@ export async function analyzeRecommendedPrice(
       {
         source: 'KREAM',
         brand: request.brand,
-        model: request.model,
-        colorway: request.colorway,
+        modelName: request.modelName,
+        color: request.color,
         size: request.size,
         conditionGrade: 'DS',
         componentStatus: null,
@@ -51,8 +51,8 @@ export async function analyzeRecommendedPrice(
       {
         source: 'EBAY',
         brand: request.brand,
-        model: request.model,
-        colorway: 'Black Red',
+        modelName: request.modelName,
+        color: 'Black Red',
         size: request.size,
         conditionGrade: 'B',
         componentStatus: null,

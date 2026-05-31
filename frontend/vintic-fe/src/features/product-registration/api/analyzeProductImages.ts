@@ -15,7 +15,7 @@ export async function analyzeProductImages(
   if (!frontImage || !backImage) {
     return createFailureResponse(
       40002,
-      '앞면과 뒷면 이미지는 필수입니다.',
+      '앞면과 뒷면, 측면 이미지는 필수입니다.',
     );
   }
 
@@ -25,9 +25,8 @@ export async function analyzeProductImages(
         'https://vintic-mvp-bucket-123.s3.ap-northeast-2.amazonaws.com/mock-front-shoe.jpg',
       backImageUrl:
         'https://vintic-mvp-bucket-123.s3.ap-northeast-2.amazonaws.com/mock-back-shoe.jpg',
-      sideImageUrl: sideImage
-        ? 'https://vintic-mvp-bucket-123.s3.ap-northeast-2.amazonaws.com/mock-side-shoe.jpg'
-        : undefined,
+      sideImageUrl:
+        'https://vintic-mvp-bucket-123.s3.ap-northeast-2.amazonaws.com/mock-side-shoe.jpg',
       defectImageUrl: defectImage
         ? 'https://vintic-mvp-bucket-123.s3.ap-northeast-2.amazonaws.com/mock-defect-shoe.jpg'
         : undefined,

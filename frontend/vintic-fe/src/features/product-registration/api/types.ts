@@ -48,8 +48,8 @@ export type AnalyzeProductImagesData = {
 
 export type AnalyzeRecommendedPriceRequest = {
   brand: string;
-  model: string;
-  colorway: string;
+  modelName: string;
+  color: string;
   size: number;
   conditionGrade: ConditionGrade;
   componentStatus: ComponentStatus;
@@ -58,8 +58,8 @@ export type AnalyzeRecommendedPriceRequest = {
 export type MarketMatch = {
   source: 'KREAM' | 'EBAY';
   brand: string;
-  model: string;
-  colorway: string;
+  modelName: string;
+  color: string;
   size: number;
   conditionGrade: string;
   componentStatus: ComponentStatus | null;
@@ -81,8 +81,8 @@ export type AnalyzeRecommendedPriceData = {
 export type RegisterProductRequest = {
   imageUrls: ProductImageUrls;
   brand: string;
-  model: string;
-  colorway: string;
+  modelName: string;
+  color: string;
   size: number;
   conditionGrade: ConditionGrade;
   componentStatus: ComponentStatus;

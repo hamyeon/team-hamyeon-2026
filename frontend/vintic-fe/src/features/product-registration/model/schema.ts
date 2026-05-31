@@ -11,9 +11,9 @@ export const productRegistrationSchema = z.object({
   defectImageUrl: z.string().optional(),
 
   brand: z.string().min(1, '브랜드를 입력해주세요.'),
-  model: z.string().min(1, '모델명을 입력해주세요.'),
-  colorway: z.string().min(1, '컬러를 입력해주세요.'),
-  size: z.coerce.number().positive('사이즈를 입력해주세요.'),
+  modelName: z.string().min(1, '모델명을 입력해주세요.'),
+  color: z.string().min(1, '컬러를 입력해주세요.'),
+  size: z.number().positive('사이즈를 입력해주세요.'),
 
   conditionDescription: z.string().min(1, '상품 상태 정보를 입력해주세요.'),
   conditionGrade: conditionGradeSchema,

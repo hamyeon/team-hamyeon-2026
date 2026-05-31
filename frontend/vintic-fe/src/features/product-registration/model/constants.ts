@@ -18,7 +18,7 @@ export const PRODUCT_IMAGE_SLOTS = [
   {
     type: 'side',
     label: '측면',
-    required: false,
+    required: true,
   },
   {
     type: 'defect',
