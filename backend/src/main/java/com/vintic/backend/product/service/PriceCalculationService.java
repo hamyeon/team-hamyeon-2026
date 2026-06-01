@@ -39,8 +39,10 @@ public class PriceCalculationService {
                     0,
                     0,
                     0,
+                    0,
+                    0,
                     "시세 정보 없음",
-                    "입력한 브랜드, 모델명, 컬러웨이, 사이즈와 일치하는 KREAM/eBay 시세 데이터를 찾지 못했습니다. 추천 가격 산정을 위해서는 유사 거래 데이터가 추가로 필요합니다.",
+                    "입력한 브랜드, 모델명, 색상, 사이즈와 일치하는 KREAM/eBay 시세 데이터를 찾지 못했습니다. 추천 가격 산정을 위해서는 유사 거래 데이터가 추가로 필요합니다.",
                     List.of(),
                     List.of()
             );
@@ -55,7 +57,9 @@ public class PriceCalculationService {
         int calculatedPrice = (int) Math.round(baseMarketPrice * conditionRate * componentRate);
         int recommendedPrice = roundToNearestThousand(calculatedPrice);
 
-        String priceRange = makePriceRange(recommendedPrice);
+        int minRecommendedPrice = calculateMinRecommendedPrice(recommendedPrice);
+        int maxRecommendedPrice = calculateMaxRecommendedPrice(recommendedPrice);
+        String priceRange = makePriceRange(minRecommendedPrice, maxRecommendedPrice);
 
         String reason = makeReason(
                 kreamMatches.size(),
@@ -76,6 +80,8 @@ public class PriceCalculationService {
                 baseMarketPrice,
                 kreamAveragePrice,
                 ebayAveragePrice,
+                minRecommendedPrice,
+                maxRecommendedPrice,
                 priceRange,
                 reason,
                 toResponseMatches(kreamMatches),
@@ -150,11 +156,16 @@ public class PriceCalculationService {
         return (int) Math.round(price / 1000.0) * 1000;
     }
 
-    private String makePriceRange(int recommendedPrice) {
-        int min = roundToNearestThousand((int) Math.round(recommendedPrice * (1 - PRICE_RANGE_RATE)));
-        int max = roundToNearestThousand((int) Math.round(recommendedPrice * (1 + PRICE_RANGE_RATE)));
+    private int calculateMinRecommendedPrice(int recommendedPrice) {
+        return roundToNearestThousand((int) Math.round(recommendedPrice * (1 - PRICE_RANGE_RATE)));
+    }
 
-        return String.format("%,d원 ~ %,d원", min, max);
+    private int calculateMaxRecommendedPrice(int recommendedPrice) {
+        return roundToNearestThousand((int) Math.round(recommendedPrice * (1 + PRICE_RANGE_RATE)));
+    }
+
+    private String makePriceRange(int minRecommendedPrice, int maxRecommendedPrice) {
+        return String.format("%,d원 ~ %,d원", minRecommendedPrice, maxRecommendedPrice);
     }
 
     private String makeReason(

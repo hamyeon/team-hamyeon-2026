@@ -7,6 +7,8 @@ public record CalculatePriceResponse(
         int baseMarketPrice,
         int kreamAveragePrice,
         int ebayAveragePrice,
+        int minRecommendedPrice,
+        int maxRecommendedPrice,
         String priceRange,
         String reason,
         List<MatchedMarketPrice> kreamMatches,
