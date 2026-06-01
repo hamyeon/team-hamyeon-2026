@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import type { UseFormReturn } from 'react-hook-form';
 import { Header } from '@/shared/ui/Header';
 import { BottomButtonBar } from '@/shared/ui/BottomButtonBar';
@@ -23,9 +26,16 @@ export function PriceResultStep({
   onEditPrice,
   onUseRecommendedPrice,
 }: PriceResultStepProps) {
+  const [isReasonOpen, setIsReasonOpen] = useState(false);
+
   const recommendedPrice = form.watch('recommendedPrice');
   const minRecommendedPrice = form.watch('minRecommendedPrice');
   const maxRecommendedPrice = form.watch('maxRecommendedPrice');
+  const reason = form.watch('reason');
+
+  const handleReasonToggle = () => {
+    setIsReasonOpen((prev) => !prev);
+  };
 
   return (
     <div className={styles.step}>
@@ -63,27 +73,42 @@ export function PriceResultStep({
               <strong className={styles.rangePrice}>
                 {formatPrice(minRecommendedPrice)}원
               </strong>
-              에 빠르게 판매할 수 있어요.
+              {'에 빠르게 판매할 수 있어요.'}
             </p>
 
             <p className={styles.rangeText}>
               <strong className={styles.rangePrice}>
                 {formatPrice(maxRecommendedPrice)}원
               </strong>
-              에 판매하는 것도 고려해볼 수 있어요.
+              {'에 판매하는 것도 고려해볼 수 있어요.'}
             </p>
           </div>
         </div>
 
-        <button type="button" className={styles.reasonButton}>
-          가격 산정 근거 자세히 보기
-          <img
-            src="/icons/icn_arrow_right_16px.svg"
-            alt=""
-            className={styles.reasonArrowIcon}
-            aria-hidden="true"
-          />
-        </button>
+        <div className={styles.reasonSection}>
+          <button
+            type="button"
+            className={styles.reasonButton}
+            onClick={handleReasonToggle}
+            aria-expanded={isReasonOpen}
+          >
+            가격 산정 근거 자세히 보기
+            <img
+              src={
+                isReasonOpen
+                  ? '/icons/icn_arrow_up_20px.svg'
+                  : '/icons/icn_arrow_down_20px.svg'
+              }
+              alt=""
+              className={styles.reasonArrowIcon}
+              aria-hidden="true"
+            />
+          </button>
+
+          {isReasonOpen && reason && (
+            <p className={styles.reasonText}>{reason}</p>
+          )}
+        </div>
       </section>
 
       <BottomButtonBar

@@ -118,11 +118,14 @@ export const rangePrice = style({
   fontWeight: vars.typography.fontWeight.semibold,
 });
 
+export const reasonSection = style({
+  marginTop: vars.spacing[36],
+});
+
 export const reasonButton = style({
   display: 'inline-flex',
   alignItems: 'center',
   gap: vars.spacing[4],
-  marginTop: vars.spacing[36],
   padding: 0,
   border: 'none',
   background: 'transparent',
@@ -143,7 +146,18 @@ export const reasonButton = style({
 
 export const reasonArrowIcon = style({
   display: 'block',
-  width: '16px',
-  height: '16px',
+  width: '20px',
+  height: '20px',
   flexShrink: 0,
+});
+
+export const reasonText = style({
+  marginTop: vars.spacing[16],
+  marginBottom: 0,
+  color: vars.color.gray5,
+
+  fontSize: vars.typography.fontSize.caption01,
+  fontWeight: vars.typography.fontWeight.regular,
+  lineHeight: vars.typography.lineHeight[160],
+  letterSpacing: vars.typography.letterSpacing.default,
 });
