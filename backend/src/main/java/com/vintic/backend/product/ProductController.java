@@ -4,12 +4,15 @@ import com.vintic.backend.common.dto.ApiResponse;
 import com.vintic.backend.product.dto.CalculatePriceRequest;
 import com.vintic.backend.product.dto.CalculatePriceResponse;
 import com.vintic.backend.product.dto.CreateProductRequest;
+import com.vintic.backend.product.dto.ProductListResponse;
 import com.vintic.backend.product.dto.ProductResponse;
 import com.vintic.backend.product.service.PriceCalculationService;
 import com.vintic.backend.product.service.ProductRegistrationService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
@@ -39,6 +42,12 @@ public class ProductController {
             @Valid @RequestBody CreateProductRequest request
     ) {
         ProductResponse response = productRegistrationService.createProduct(request);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<ProductListResponse>>> getProducts() {
+        List<ProductListResponse> response = productRegistrationService.getProducts();
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 }
