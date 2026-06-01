@@ -3,7 +3,7 @@ import { vars } from '@/shared/styles/theme.css';
 
 export const textarea = style({
   width: '100%',
-  minHeight: '90px',
+  minHeight: '102px',
   padding: vars.spacing[12],
 
   border: `1px solid ${vars.color.gray2}`,
@@ -13,7 +13,7 @@ export const textarea = style({
   outline: 'none',
   resize: 'none',
 
-  fontSize: vars.typography.fontSize.body05,
+  fontSize: vars.typography.fontSize.body02,
   fontWeight: vars.typography.fontWeight.regular,
   lineHeight: vars.typography.lineHeight[160],
   letterSpacing: vars.typography.letterSpacing.default,

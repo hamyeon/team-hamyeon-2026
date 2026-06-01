@@ -3,7 +3,7 @@ import { vars } from '@/shared/styles/theme.css';
 
 export const input = style({
   width: '100%',
-  height: '46px',
+  height: '50px',
   padding: `0 ${vars.spacing[12]}`,
 
   border: `1px solid ${vars.color.gray2}`,
@@ -12,7 +12,7 @@ export const input = style({
   color: vars.color.black,
   outline: 'none',
 
-  fontSize: vars.typography.fontSize.body05,
+  fontSize: vars.typography.fontSize.body02,
   fontWeight: vars.typography.fontWeight.regular,
   lineHeight: vars.typography.lineHeight[160],
   letterSpacing: vars.typography.letterSpacing.default,
