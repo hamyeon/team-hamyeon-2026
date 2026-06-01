@@ -25,6 +25,8 @@ export const vars = createGlobalTheme(':root', {
     16: '16px',
     20: '20px',
     24: '24px',
+    28: '28px',
+    32: '32px',
     36: '36px',
   },
 
