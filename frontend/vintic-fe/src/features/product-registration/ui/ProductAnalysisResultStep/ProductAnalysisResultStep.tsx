@@ -1,4 +1,6 @@
-import type { UseFormReturn } from 'react-hook-form';
+'use client';
+
+import { useWatch, type UseFormReturn } from 'react-hook-form';
 import { Header } from '@/shared/ui/Header';
 import { BottomButtonBar } from '@/shared/ui/BottomButtonBar';
 import { Input } from '@/shared/ui/Input';
@@ -15,6 +17,18 @@ export function ProductAnalysisResultStep({
   form,
   onNext,
 }: ProductAnalysisResultStepProps) {
+  const [brand, modelName, color, size, conditionDescription] = useWatch({
+    control: form.control,
+    name: ['brand', 'modelName', 'color', 'size', 'conditionDescription'],
+  });
+
+  const canGoNext =
+    Boolean(brand?.trim()) &&
+    Boolean(modelName?.trim()) &&
+    Boolean(color?.trim()) &&
+    Number(size) > 0 &&
+    Boolean(conditionDescription?.trim());
+
   return (
     <div className={styles.step}>
       <Header title="상품 등록하기" showBackButton hasBottomBorder />
@@ -80,6 +94,7 @@ export function ProductAnalysisResultStep({
         action={{
           label: '다음',
           variant: 'primary',
+          disabled: !canGoNext,
           onClick: onNext,
         }}
       />
