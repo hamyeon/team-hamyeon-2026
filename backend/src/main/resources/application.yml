@@ -1,6 +1,17 @@
 spring:
   profiles:
     include: secret
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 로컬에서 개발할 때는 EC2로 SSH 포트포워딩을 열어두고 아래 주소를 쓴다.
+    url: jdbc:mysql://vintic-mvp-db.cm1iwawqi1ew.us-east-1.rds.amazonaws.com:3306/amber_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update # 자바 코드로 테이블을 정의하면 DB에 알아서 테이블을 만들어주는 옵션
+    show-sql: true
 
 cloud:
   aws:
