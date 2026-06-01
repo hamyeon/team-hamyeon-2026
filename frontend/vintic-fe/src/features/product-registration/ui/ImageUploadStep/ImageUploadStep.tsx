@@ -34,6 +34,8 @@ export function ImageUploadStep({
         title="상품 등록하기"
         showBackButton
         hasBottomBorder
+        fallbackHref="/"
+        progress={1 / 5}
       />
 
       <section className={styles.content}>

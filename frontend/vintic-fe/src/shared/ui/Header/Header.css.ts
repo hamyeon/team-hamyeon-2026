@@ -1,6 +1,11 @@
 import { style } from '@vanilla-extract/css';
 import { vars } from '@/shared/styles/theme.css';
 
+export const wrapper = style({
+  width: '100%',
+  background: vars.color.white,
+});
+
 export const header = style({
   display: 'grid',
   gridTemplateColumns: '52px 1fr 52px',
@@ -62,4 +67,18 @@ export const title = style({
   fontWeight: vars.typography.fontWeight.semibold,
   lineHeight: vars.typography.lineHeight[140],
   letterSpacing: vars.typography.letterSpacing.default,
+});
+
+export const progressTrack = style({
+  width: '100%',
+  height: '4px',
+  background: vars.color.gray1,
+});
+
+export const progressBar = style({
+  height: '100%',
+  background: vars.color.black,
+  borderTopRightRadius: vars.radius[4],
+  borderBottomRightRadius: vars.radius[4],
+  transition: 'width 0.2s ease',
 });

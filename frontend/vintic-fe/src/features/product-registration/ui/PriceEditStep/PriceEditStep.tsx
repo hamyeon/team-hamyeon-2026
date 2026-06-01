@@ -38,7 +38,13 @@ export function PriceEditStep({ form, onComplete }: PriceEditStepProps) {
 
   return (
     <div className={styles.step}>
-      <Header title="상품 등록하기" showBackButton hasBottomBorder />
+      <Header
+        title="상품 등록하기"
+        showBackButton
+        hasBottomBorder
+        fallbackHref="/"
+        progress={4 / 5}
+      />
 
       <section className={styles.content}>
         <p className={styles.stepText}>4/5</p>
