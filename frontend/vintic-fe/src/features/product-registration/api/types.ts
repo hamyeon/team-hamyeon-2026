@@ -72,6 +72,8 @@ export type AnalyzeRecommendedPriceData = {
   baseMarketPrice: number;
   kreamAveragePrice: number;
   ebayAveragePrice: number;
+  minRecommendedPrice: number;
+  maxRecommendedPrice: number;
   priceRange: string;
   reason: string;
   kreamMatches: MarketMatch[];

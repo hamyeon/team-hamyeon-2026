@@ -25,6 +25,8 @@ export const productRegistrationSchema = z.object({
   baseMarketPrice: z.number().optional(),
   kreamAveragePrice: z.number().optional(),
   ebayAveragePrice: z.number().optional(),
+  minRecommendedPrice: z.number().optional(),
+  maxRecommendedPrice: z.number().optional(),
   priceRange: z.string().optional(),
   reason: z.string().optional(),
 

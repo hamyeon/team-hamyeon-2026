@@ -31,6 +31,8 @@ export async function analyzeRecommendedPrice(
     baseMarketPrice: 120984,
     kreamAveragePrice: 114000,
     ebayAveragePrice: 137280,
+    minRecommendedPrice: 69000,
+    maxRecommendedPrice: 77000,
     priceRange: '69,000원 ~ 77,000원',
     reason:
       'KREAM 유사 거래 1건의 평균가 114,000원과 eBay 유사 거래 50건의 평균가 137,280원을 각각 70%, 30% 비율로 반영해 기준 시세 120,984원을 계산했습니다. 상품 상태는 B 등급으로 판단했으며, 구성품 여부를 반영해 최종 추천가를 산정했습니다.',
